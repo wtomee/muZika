@@ -6,17 +6,33 @@ const Signup = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+  const [exists, setExists] = useState(false)
+  const [emptyUsername, setEmptyUsername] = useState(false)
+  const [emptyPassword, setEmptyPassword] = useState(false)
+
   const signup = async () => {
-    const { data } = await axios.post('/api/register', {
-      username,
-      password,
-    })
-    if (data) {
-      axios.defaults.headers.authorization = `Bearer ${data.token}`
-      window.localStorage.setItem('token', data.token)
-      window.localStorage.setItem('name', data.name)
-      console.log(data)
-      navigate('/songs')
+    if (username && password) {
+      const { data } = await axios.post('/api/register', {
+        username,
+        password,
+      })
+      if (data && !data.error) {
+        axios.defaults.headers.authorization = `Bearer ${data.token}`
+        window.localStorage.setItem('token', data.token)
+        window.localStorage.setItem('name', data.name)
+        console.log(data)
+        navigate('/songs')
+      } else if (data.error) {
+        setExists(true)
+        console.log(data.error)
+      }
+    } else {
+      if (!username) {
+        setEmptyUsername(true)
+      }
+      if (!password) {
+        setEmptyPassword(true)
+      }
     }
   }
   return (
@@ -29,6 +45,10 @@ const Signup = () => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
+      {exists && <span className="validateErrorMsg">Username exists</span>}
+      {emptyUsername && !username && (
+        <span className="validateErrorMsg">Required to fill field</span>
+      )}
       <input
         className="inputField"
         type="password"
@@ -36,6 +56,9 @@ const Signup = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {emptyPassword && !password && (
+        <span className="validateErrorMsg">Required to fill fields</span>
+      )}
       <button className="defaultButton" type="button" onClick={signup}>
         Sign up
       </button>
