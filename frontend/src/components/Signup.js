@@ -57,7 +57,7 @@ const Signup = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       {emptyPassword && !password && (
-        <span className="validateErrorMsg">Required to fill fields</span>
+        <span className="validateErrorMsg">Required to fill field</span>
       )}
       <button className="defaultButton" type="button" onClick={signup}>
         Sign up
