@@ -27,7 +27,7 @@ const playlistSchema = new mongoose.Schema({
   songs: { type: Array }
 })
 
-const musicSchema = new mongoose.Schema({
+const songSchema = new mongoose.Schema({
   artist: { type: String, required: true },
   title: { type: String, required: true },
   image: { type: String },
@@ -46,7 +46,7 @@ const categorySchema = new mongoose.Schema({
 // DB CLASSES
 const User = mongoose.model('User', userSchema)
 const Playlist = mongoose.model('Playlist', playlistSchema)
-const Music = mongoose.model('Music', musicSchema)
+const Song = mongoose.model('Song', songSchema)
 const Category = mongoose.model('Category', categorySchema)
 
 
@@ -69,7 +69,7 @@ const authMw = async (req, res, next) => {
 // ROUTES
 
 router.post('/register', async (req, res, next) => {
-  const { username, password, email } = req.body
+  const { username, password/*, email */ } = req.body
   const user = await User.findOne({ username })
   if(user) {
     next('User exitsts')
@@ -100,15 +100,74 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
+
+// router.post('/logout', authMw, async (req, res, next) => {
+//   res.cookie.token
+// })
+  
+// SONGS
 router.get('/songs', authMw, async (req, res) =>{
-  const music = await Music.find({ createdBy: req.user })
-  res.json(music)
+  const songs = await Song.find({ createdBy: req.user })
+  if (songs.length > 0) {
+    res.json(songs)
+  } else {
+    res.send('No songs found')
+  }
+})
+
+router.get('/search/:key', authMw, async (req, res) =>{
+  const result = await Song.find({
+    "$or": [
+        {
+          artist : { $regex: req.params.key },
+          title : { $regex: req.params.key }
+        }
+    ]
+  })
+  res.send(result)
+})
+
+router.get('/songs/:id', authMw, async (req, res) =>{
+  const song = await Song.findOne({ _id:req.params.id})
+  if (song) {
+    res.json(song)
+  } else {
+    res.send({"result": "No song found with ID"})
+  }
+})
+
+router.put('/songs/:id', authMw, async (req, res) =>{
+  const song = await Song.updateOne(
+    { _id:req.params.id },
+    { $set:req.body })
+    res.json(song)
+})
+
+router.delete('/songs/:id', authMw, async (req, res) =>{
+  const deleted = await Song.deleteOne({_id:req.params.id})
+  res.json(deleted)
 })
 
 router.post('/songs', authMw, async (req, res) =>{
   const { artist, title } = req.body
-  const created = await Music.create({ artist, title, createdBy: req.user})
+  const created = await Song.create({ artist, title, createdBy: req.user})
   res.json(created)
+})
+
+router.get('/categories', authMw, async (req, res) =>{
+  const categories = await Category.find()
+  res.json(categories)
+})
+
+router.post('/categories', authMw, async (req, res) =>{
+  const { name } = req.body
+  const category = await Category.findOne({ name })
+  if(category) {
+    next('Category exists')
+  } else {
+    const created = await Category.create({ name })
+    res.json(created)
+  }
 })
 
 router.get('/heartbeat', async (req, res) => {
