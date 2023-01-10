@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, index:true, required: true, trim: true },
   password: { type: String, select: false },
   registeredAt: { type: Date, default: Date.now, select: false },
-  email: { type: String, index: true},
+  // email: { type: String, index: true},
   favourites: { type: Array },
   playlists: { type: Array },
   own_songs: { type: Array },
@@ -72,7 +72,7 @@ router.post('/register', async (req, res, next) => {
   const { username, password/*, email */ } = req.body
   const user = await User.findOne({ username })
   if(user) {
-    next('User exitsts')
+    res.json({ "error": "user exists"})
   } else {
     const hashed = await bcrypt.hash(password, 10)
     const createdUser = await User.create({ username, password:hashed })
