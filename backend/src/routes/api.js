@@ -76,8 +76,11 @@ router.post('/register', async (req, res, next) => {
   } else {
     const hashed = await bcrypt.hash(password, 10)
     const createdUser = await User.create({ username, password:hashed })
+    const token = await jwt.sign({ userId: createdUser.id}, TOKEN_SECRET, {
+      expiresIn: '1h'
+    })
 
-    res.json({id: createdUser.id})
+    res.json({id: createdUser.id, name: createdUser.name, token})
   }
 })
 
