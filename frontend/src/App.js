@@ -62,13 +62,12 @@ const App = () => {
       <BrowserRouter>
         <Nav />
         <Routes>
-          <Route path="/home" element={<h1>Home component</h1>} />
+          <Route path="/playlists" element={<h1>Playlists</h1>} />
           <Route path="/songs" element={<SongList />} />
           <Route path="/upload-song" element={<SongForm />} />
           <Route path="/songs/:id" element={<EditSong />} />
           <Route path="/categories" element={<h1>Categories</h1>} />
-          <Route path="/create-categories" element={<CategoryForm />} />
-          <Route path="/users" element={<h1>Users component</h1>} />
+          <Route path="/create-category" element={<CategoryForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>

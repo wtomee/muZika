@@ -2,10 +2,21 @@
   text-align: -webkit-center;
 }
 
+:root {
+  --primary-color: #3c6e91b5;
+  --secondary-color: #87ceeb2b;
+  --error-color: #ff4545;
+
+  --border-radius-s: 4px;
+  --border-radius-m: 8px;
+  --border-radius-l: 12px;
+
+}
+
 .nav-ul {
   padding: 5px;
   margin: 0px;
-  background-color: #61dafb;
+  background-color: var(--primary-color);
 }
 
 .nav-ul li{
@@ -22,7 +33,7 @@
 .footer {
   position: absolute;
   bottom: 0;
-  background: skyblue;
+  background: var(--secondary-color);
   width: 100%;
   text-align: center;
 }
@@ -31,9 +42,10 @@
   margin: 20px;
   width: 150px;
   padding: 10px;
-  background-color: skyblue;
-  border: solid 1px;
+  background-color: var(--primary-color);
+  border: solid 1px var(--secondary-color);
   cursor: pointer;
+  border-radius: var(--border-radius-l);
 
 }
 
@@ -42,14 +54,15 @@
   margin: 20px;
   width: 300px;
   display: block;
-  border: 1px solid skyblue;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-l);
 }
 
 .validateErrorMsg {
   display: block;
-  color: red;
+  color: var(--error-color);
   margin-top: -20px;
-  margin-left: -200px;
+  margin-left: -190px;
 }
 
 .defaultList {
@@ -63,7 +76,7 @@
 .defaultList ul li {
   display: inline-block;
   width: 150px;
-  border: 1px solid skyblue;
+  border: 1px solid var(--primary-color);
   padding: 5px;
 }
 
@@ -72,7 +85,8 @@
   margin: 20px;
   height: 38px;
   /* padding-left: 30px; */
-  border: 1px solid skyblue;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-l);
 
 }
 
