@@ -88,11 +88,11 @@ router.post('/login', async (req, res, next) => {
   const { username, password } = req.body
   const user = await User.findOne({ username }).select('+password')
   if(!user) {
-    next('No such user')
+    res.json({ "error": "no such user"})
   } else {
     const match = await bcrypt.compare(password, user.password)
     if(!match){
-      next('Wrong password')
+      res.json({ "passwordError":"wrong password" })
     } else {
       const token = await jwt.sign({ userId: user.id }, TOKEN_SECRET, {
         expiresIn: '1h'
@@ -103,11 +103,6 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
-
-// router.post('/logout', authMw, async (req, res, next) => {
-//   res.cookie.token
-// })
-  
 // SONGS
 router.get('/songs', authMw, async (req, res) =>{
   const songs = await Song.find({ createdBy: req.user })
