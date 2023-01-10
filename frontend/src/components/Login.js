@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
   const login = async () => {
     const { data } = await axios.post('/api/login', {
       username,
@@ -12,6 +14,7 @@ const Login = () => {
     axios.defaults.headers.authorization = `Bearer ${data.token}`
     window.localStorage.setItem('token', data.token)
     console.log(data)
+    navigate('/')
   }
 
   return (

@@ -11,8 +11,13 @@ const Signup = () => {
       username,
       password,
     })
-    console.log(data)
-    navigate('/')
+    if (data) {
+      axios.defaults.headers.authorization = `Bearer ${data.token}`
+      window.localStorage.setItem('token', data.token)
+      window.localStorage.setItem('name', data.name)
+      console.log(data)
+      navigate('/songs')
+    }
   }
   return (
     <div className="signup">
