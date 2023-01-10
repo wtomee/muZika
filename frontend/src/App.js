@@ -15,8 +15,6 @@ const App = () => {
   const [connected, setConnected] = useState(false)
   const [init, setInit] = useState(false)
   const [error, setError] = useState()
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
 
   // HEARTBEAT
   useEffect(() => {
@@ -44,25 +42,12 @@ const App = () => {
     }
   })
 
-  // const login = async () => {
-  //   const { data } = await axios.post('/api/login', {
-  //     username,
-  //     password,
-  //   })
-  //   axios.defaults.headers.authorization = `Bearer ${data.token}`
-  //   console.log(data)
-  // }
-  // const getSongs = async () => {
-  //   const { data: songs } = await axios.get('/api/songs')
-  //   console.log(songs)
-  // }
-
   return (
     <div className="App">
       <BrowserRouter>
         <Nav />
         <Routes>
-          <Route path="/playlists" element={<h1>Playlists</h1>} />
+          <Route path="/" element={<h1>Playlists</h1>} />
           <Route path="/songs" element={<SongList />} />
           <Route path="/upload-song" element={<SongForm />} />
           <Route path="/songs/:id" element={<EditSong />} />
@@ -71,15 +56,6 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
-        {/* {error && connected}
-        <input value={username} onChange={(e) => setUsername(e.target.value)} />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={login}>login</button>
-        <button onClick={getSongs}>getSongs</button> */}
       </BrowserRouter>
       <Footer />
     </div>
