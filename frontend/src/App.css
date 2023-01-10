@@ -75,3 +75,16 @@
   border: 1px solid skyblue;
 
 }
+
+.navbarLogo {
+  height: 45px;
+  width: 60px;
+  border-radius: 50%;
+  float: left;
+  margin-top: 3px;
+  margin-left: 10px;
+}
+
+.nav-right {
+  text-align: right;
+}
