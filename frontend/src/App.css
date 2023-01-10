@@ -5,6 +5,7 @@
 :root {
   --primary-color: #3c6e91b5;
   --secondary-color: #87ceeb2b;
+  --third-color: #f0f8ff4a;
   --error-color: #ff4545;
 
   --border-radius-s: 4px;
@@ -30,6 +31,10 @@
   padding: 5px;
 }
 
+.nav-ul li a:hover{
+  color: #aed4ef;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -46,6 +51,8 @@
   border: solid 1px var(--secondary-color);
   cursor: pointer;
   border-radius: var(--border-radius-l);
+  color: #fff;
+  font-weight: 600;
 
 }
 
@@ -75,9 +82,15 @@
 
 .defaultList ul li {
   display: inline-block;
-  width: 150px;
+  width: 170px;
+  height: 25px;
   border: 1px solid var(--primary-color);
   padding: 5px;
+}
+
+.column {
+  background-color: var(--third-color);
+  font-weight: 600;
 }
 
 .filterField {
@@ -101,4 +114,13 @@
 
 .nav-right {
   text-align: right;
+}
+
+
+.actionButton {
+  border-radius: var(--border-radius-s);
+  margin-left: 5px;
+  background: var(--secondary-color);
+  cursor: pointer;
+
 }

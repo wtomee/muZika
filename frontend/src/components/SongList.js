@@ -43,9 +43,9 @@ const SongList = () => {
         onChange={filtering}
       />
       <ul>
-        <li>Artist</li>
-        <li>Title</li>
-        <li>Action</li>
+        <li className="column">Artist</li>
+        <li className="column">Title</li>
+        <li className="column">Action</li>
       </ul>
       {songs.length > 0 ? (
         songs.map((item, index) => (
@@ -53,8 +53,15 @@ const SongList = () => {
             <li>{item.artist}</li>
             <li>{item.title}</li>
             <li>
-              <Link to={`${item._id}`}>Edit</Link>
-              <button onClick={() => deleteSong(item._id)}>Delete</button>
+              <Link to={`${item._id}`}>
+                <button className="actionButton">Edit</button>
+              </Link>
+              <button
+                className="actionButton"
+                onClick={() => deleteSong(item._id)}
+              >
+                Delete
+              </button>
             </li>
           </ul>
         ))
