@@ -18,7 +18,7 @@ const Nav = () => {
       {auth ? (
         <ul className="nav-ul">
           <li>
-            <Link to="/home">Home</Link>
+            <Link to="/">Playlists</Link>
           </li>
           <li>
             <Link to="/songs">Songs</Link>
@@ -30,10 +30,7 @@ const Nav = () => {
             <Link to="/categories">Categories</Link>
           </li>
           <li>
-            <Link to="/create-categories">Create categories</Link>
-          </li>
-          <li>
-            <Link to="/users">Users</Link>
+            <Link to="/create-category">Create category</Link>
           </li>
           <li>
             <Link onClick={logout} to="/login">

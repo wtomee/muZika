@@ -2,10 +2,22 @@
   text-align: -webkit-center;
 }
 
+:root {
+  --primary-color: #3c6e91b5;
+  --secondary-color: #87ceeb2b;
+  --third-color: #f0f8ff4a;
+  --error-color: #ff4545;
+
+  --border-radius-s: 4px;
+  --border-radius-m: 8px;
+  --border-radius-l: 12px;
+
+}
+
 .nav-ul {
   padding: 5px;
   margin: 0px;
-  background-color: #61dafb;
+  background-color: var(--primary-color);
 }
 
 .nav-ul li{
@@ -19,10 +31,14 @@
   padding: 5px;
 }
 
+.nav-ul li a:hover{
+  color: #aed4ef;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
-  background: skyblue;
+  background: var(--secondary-color);
   width: 100%;
   text-align: center;
 }
@@ -31,9 +47,12 @@
   margin: 20px;
   width: 150px;
   padding: 10px;
-  background-color: skyblue;
-  border: solid 1px;
+  background-color: var(--primary-color);
+  border: solid 1px var(--secondary-color);
   cursor: pointer;
+  border-radius: var(--border-radius-l);
+  color: #fff;
+  font-weight: 600;
 
 }
 
@@ -42,14 +61,15 @@
   margin: 20px;
   width: 300px;
   display: block;
-  border: 1px solid skyblue;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-l);
 }
 
 .validateErrorMsg {
   display: block;
-  color: red;
+  color: var(--error-color);
   margin-top: -20px;
-  margin-left: -200px;
+  margin-left: -190px;
 }
 
 .defaultList {
@@ -62,9 +82,15 @@
 
 .defaultList ul li {
   display: inline-block;
-  width: 150px;
-  border: 1px solid skyblue;
+  width: 170px;
+  height: 25px;
+  border: 1px solid var(--primary-color);
   padding: 5px;
+}
+
+.column {
+  background-color: var(--third-color);
+  font-weight: 600;
 }
 
 .filterField {
@@ -72,7 +98,8 @@
   margin: 20px;
   height: 38px;
   /* padding-left: 30px; */
-  border: 1px solid skyblue;
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-l);
 
 }
 
@@ -87,4 +114,68 @@
 
 .nav-right {
   text-align: right;
+}
+
+
+.actionButton {
+  border-radius: var(--border-radius-s);
+  margin-left: 5px;
+  background: var(--secondary-color);
+  cursor: pointer;
+
+}
+
+/* Categories */
+.categories-div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.category-card {
+  
+  margin: 50px;
+  background: #fff;
+  box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
+  overflow: hidden;
+  position: relative;
+  width: 200px;
+  height: 260px;
+  border-radius: 6px;
+}
+
+.category-card-image {
+  /* background: url('http://static1.squarespace.com/static/530b728de4b04fc9b23a5988/t/569880381a5203aa7d44c1a8/1452834873397/00.jpg?format=1000w') no-repeat 75%; */
+  background-size: cover;  
+  /* position: absolute; */
+  z-index: 1;
+  opacity: 0.8;
+  height: 200px;
+  width: 200px;
+}
+
+.category-card-info {
+  position: absolute;
+  bottom: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.4em;
+  font-weight: 400;
+  color: #333;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-family: 'Reem Kufi', sans-serif;
+}
+
+.artist {
+  color: #cfcfcf;
+  font-size: 1.2em;
+  letter-spacing: 0.08em;
+  font-family: 'Reem Kufi', sans-serif;
+  margin-top: -10px;
 }

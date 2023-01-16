@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, index:true, required: true, trim: true },
   password: { type: String, select: false },
   registeredAt: { type: Date, default: Date.now, select: false },
-  email: { type: String, index: true},
+  // email: { type: String, index: true},
   favourites: { type: Array },
   playlists: { type: Array },
   own_songs: { type: Array },
@@ -31,7 +31,9 @@ const songSchema = new mongoose.Schema({
   artist: { type: String, required: true },
   title: { type: String, required: true },
   image: { type: String },
-  category: { type: Array },
+  category: { type: mongoose.Schema.Types.ObjectId,
+    ref:'Category'
+  },
   createdBy: { type: mongoose.Schema.Types.ObjectId,
     ref:'User',
     required: true
@@ -72,7 +74,7 @@ router.post('/register', async (req, res, next) => {
   const { username, password/*, email */ } = req.body
   const user = await User.findOne({ username })
   if(user) {
-    next('User exitsts')
+    res.json({ "error": "user exists"})
   } else {
     const hashed = await bcrypt.hash(password, 10)
     const createdUser = await User.create({ username, password:hashed })
@@ -88,11 +90,11 @@ router.post('/login', async (req, res, next) => {
   const { username, password } = req.body
   const user = await User.findOne({ username }).select('+password')
   if(!user) {
-    next('No such user')
+    res.json({ "error": "no such user"})
   } else {
     const match = await bcrypt.compare(password, user.password)
     if(!match){
-      next('Wrong password')
+      res.json({ "passwordError":"wrong password" })
     } else {
       const token = await jwt.sign({ userId: user.id }, TOKEN_SECRET, {
         expiresIn: '1h'
@@ -103,11 +105,6 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
-
-// router.post('/logout', authMw, async (req, res, next) => {
-//   res.cookie.token
-// })
-  
 // SONGS
 router.get('/songs', authMw, async (req, res) =>{
   const songs = await Song.find({ createdBy: req.user })
@@ -130,12 +127,37 @@ router.get('/search/:key', authMw, async (req, res) =>{
   res.send(result)
 })
 
+router.get('/search/:category/:key', authMw, async (req, res) =>{
+  const result = await Song.find({
+    "$or": [
+        {
+          artist : { $regex: req.params.key },
+          title : { $regex: req.params.key },
+          category : {$regex: req.params.category },
+        }
+    ]
+  })
+  res.send(result)
+})
+
 router.get('/songs/:id', authMw, async (req, res) =>{
   const song = await Song.findOne({ _id:req.params.id})
   if (song) {
     res.json(song)
   } else {
     res.send({"result": "No song found with ID"})
+  }
+})
+
+router.get('/categories/:category/songs', authMw, async (req, res) =>{
+  console.warn('category get',req.params.category)
+  const foundCategory = await Category.findOne({ _id: req.params.category})
+  console.warn('category found', foundCategory)
+  const songs = await Song.find({ category: foundCategory._id })
+  if (songs.length > 0) {
+    res.json(songs)
+  } else {
+    res.send('No songs found for this category')
   }
 })
 
@@ -152,8 +174,8 @@ router.delete('/songs/:id', authMw, async (req, res) =>{
 })
 
 router.post('/songs', authMw, async (req, res) =>{
-  const { artist, title } = req.body
-  const created = await Song.create({ artist, title, createdBy: req.user})
+  const { artist, title, selectedCategory } = req.body
+  const created = await Song.create({ artist, title, createdBy: req.user, category: selectedCategory})
   res.json(created)
 })
 
@@ -162,13 +184,22 @@ router.get('/categories', authMw, async (req, res) =>{
   res.json(categories)
 })
 
+router.get('/categories/:id', authMw, async (req, res) =>{
+  const category = await Category.findOne({_id:req.params.id})
+  if (category) {
+    res.json(category)
+  } else {
+    res.send({"result":"No category found"})
+  }
+})
+
 router.post('/categories', authMw, async (req, res) =>{
-  const { name } = req.body
+  const { name, image } = req.body
   const category = await Category.findOne({ name })
   if(category) {
-    next('Category exists')
+    res.json({ "error": "category exists"})
   } else {
-    const created = await Category.create({ name })
+    const created = await Category.create({ name, image })
     res.json(created)
   }
 })
