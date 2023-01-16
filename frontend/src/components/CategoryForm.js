@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const CategoryForm = () => {
+  const navigate = useNavigate()
   const [name, setName] = useState('')
   const [image, setImage] = useState('')
   const [nameExists, setNameExists] = useState(false)
@@ -19,6 +21,20 @@ const CategoryForm = () => {
       console.log(data)
       if (data.error) {
         setNameExists(true)
+      }
+      if (data && !data.error && !nameExists && !emptyCategoryName) {
+        navigate('/categories')
+      }
+    } else if (name && !image) {
+      const { data } = await axios.post('/api/categories', {
+        name,
+      })
+      console.log(data)
+      if (data.error) {
+        setNameExists(true)
+      }
+      if (data && !data.error && !nameExists && !emptyCategoryName) {
+        navigate('/categories')
       }
     } else if (!name) {
       setEmptyCategoryName(true)

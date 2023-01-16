@@ -4,8 +4,7 @@ import { useParams } from 'react-router-dom'
 import SongList from './SongList'
 
 const CategoryDetails = () => {
-  const defaultCategoryImage =
-    'http://static1.squarespace.com/static/530b728de4b04fc9b23a5988/t/569880381a5203aa7d44c1a8/1452834873397/00.jpg'
+  const defaultCategoryImage = '/img/empty-category.png'
   const [category, setCategory] = useState('')
   const params = useParams()
   const getCategoryDetails = async (params) => {

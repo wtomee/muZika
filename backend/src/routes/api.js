@@ -111,7 +111,7 @@ router.get('/songs', authMw, async (req, res) =>{
   if (songs.length > 0) {
     res.json(songs)
   } else {
-    res.send('No songs found')
+    res.send({"error" : "No songs found"})
   }
 })
 
