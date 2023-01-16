@@ -49,7 +49,7 @@ const App = () => {
       <BrowserRouter>
         <Nav />
         <Routes>
-          <Route path="/" element={<h1>Discover</h1>} />
+          <Route path="/" element={<SongList />} />
           <Route path="/songs" element={<SongList />} />
           <Route path="/upload-song" element={<SongForm />} />
           <Route path="/songs/:id" element={<EditSong />} />

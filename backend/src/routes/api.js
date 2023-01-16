@@ -107,11 +107,11 @@ router.post('/login', async (req, res, next) => {
 
 // SONGS
 router.get('/songs', authMw, async (req, res) =>{
-  const songs = await Song.find({ createdBy: req.user })
+  const songs = await Song.find(/* { createdBy: req.user } */)
   if (songs.length > 0) {
     res.json(songs)
   } else {
-    res.send('No songs found')
+    res.send({"error" : "No songs found"})
   }
 })
 

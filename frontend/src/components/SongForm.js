@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import SongList from './SongList'
 
 const SongForm = () => {
@@ -8,9 +9,10 @@ const SongForm = () => {
   const [error, setError] = useState(false)
   const [categories, setCategories] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('')
+  const navigate = useNavigate()
 
   const uploadSong = async () => {
-    if (!artist || !title) {
+    if (!artist || !title || !selectedCategory) {
       // these are invalid, set error...
       setError(true)
     } else if (!error) {
@@ -19,6 +21,7 @@ const SongForm = () => {
         title,
         selectedCategory,
       })
+      navigate('/songs')
     }
   }
   const getCategories = async () => {
@@ -57,13 +60,20 @@ const SongForm = () => {
           setSelectedCategory(e.target.value)
         }}
       >
-        {categories.length > 0 &&
-          categories.map((item, index) => (
-            <option key={item._id} value={item._id}>
-              {item.name}
-            </option>
-          ))}
+        <option disabled selected value>
+          -- select an option --
+        </option>
+        {Array.isArray(categories)
+          ? categories.map((item, index) => (
+              <option key={item._id} value={item._id}>
+                {item.name}
+              </option>
+            ))
+          : null}
       </select>
+      {error && !selectedCategory && (
+        <span className="validateErrorMsg">Select valid category</span>
+      )}
       <button className="defaultButton" type="button" onClick={uploadSong}>
         Upload
       </button>

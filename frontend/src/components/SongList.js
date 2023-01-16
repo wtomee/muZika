@@ -33,14 +33,7 @@ const SongList = ({ category }) => {
 
   const filtering = async (event) => {
     const filterString = event.target.value
-    if (category && filterString) {
-      const { data: result } = await axios.get(
-        `/api/search/${category._id}/${filterString}`
-      )
-      if (result) {
-        setSongs(result)
-      }
-    } else if (filterString) {
+    if (filterString) {
       const { data: result } = await axios.get(`/api/search/${filterString}`)
       if (result) {
         setSongs(result)
@@ -51,19 +44,21 @@ const SongList = ({ category }) => {
   }
   return (
     <div className="defaultList">
-      <h1>Song List</h1>
-      <input
-        type=""
-        className="filterField"
-        placeholder="Filter by artist, title"
-        onChange={filtering}
-      />
+      {!category && <h1>Song List</h1>}
+      {!category && (
+        <input
+          type=""
+          className="filterField"
+          placeholder="Filter by artist, title"
+          onChange={filtering}
+        />
+      )}
       <ul>
         <li className="column">Artist</li>
         <li className="column">Title</li>
         <li className="column">Action</li>
       </ul>
-      {songs.length > 0 ? (
+      {Array.isArray(songs) ? (
         songs.map((item, index) => (
           <ul key={item._id}>
             <li>{item.artist}</li>

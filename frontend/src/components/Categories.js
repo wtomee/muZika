@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useFetcher, useNavigate, Link } from 'react-router-dom'
 
 const Categories = () => {
-  const defaultCategoryImage =
-    'http://static1.squarespace.com/static/530b728de4b04fc9b23a5988/t/569880381a5203aa7d44c1a8/1452834873397/00.jpg'
+  const defaultCategoryImage = '/img/empty-category.png'
   const [categories, setCategories] = useState([])
   const getCategories = async () => {
     const { data: result } = await axios.get('/api/categories')
