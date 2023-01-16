@@ -10,6 +10,8 @@ import SongForm from './components/SongForm'
 import SongList from './components/SongList'
 import EditSong from './components/EditSong'
 import CategoryForm from './components/CategoryForm'
+import Categories from './components/Categories'
+import CategoryDetails from './components/CategoryDetails'
 
 const App = () => {
   const [connected, setConnected] = useState(false)
@@ -47,11 +49,12 @@ const App = () => {
       <BrowserRouter>
         <Nav />
         <Routes>
-          <Route path="/" element={<h1>Playlists</h1>} />
+          <Route path="/" element={<h1>Discover</h1>} />
           <Route path="/songs" element={<SongList />} />
           <Route path="/upload-song" element={<SongForm />} />
           <Route path="/songs/:id" element={<EditSong />} />
-          <Route path="/categories" element={<h1>Categories</h1>} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:id" element={<CategoryDetails />} />
           <Route path="/create-category" element={<CategoryForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

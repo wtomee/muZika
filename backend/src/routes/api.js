@@ -31,7 +31,9 @@ const songSchema = new mongoose.Schema({
   artist: { type: String, required: true },
   title: { type: String, required: true },
   image: { type: String },
-  category: { type: Array },
+  category: { type: mongoose.Schema.Types.ObjectId,
+    ref:'Category'
+  },
   createdBy: { type: mongoose.Schema.Types.ObjectId,
     ref:'User',
     required: true
@@ -125,12 +127,37 @@ router.get('/search/:key', authMw, async (req, res) =>{
   res.send(result)
 })
 
+router.get('/search/:category/:key', authMw, async (req, res) =>{
+  const result = await Song.find({
+    "$or": [
+        {
+          artist : { $regex: req.params.key },
+          title : { $regex: req.params.key },
+          category : {$regex: req.params.category },
+        }
+    ]
+  })
+  res.send(result)
+})
+
 router.get('/songs/:id', authMw, async (req, res) =>{
   const song = await Song.findOne({ _id:req.params.id})
   if (song) {
     res.json(song)
   } else {
     res.send({"result": "No song found with ID"})
+  }
+})
+
+router.get('/categories/:category/songs', authMw, async (req, res) =>{
+  console.warn('category get',req.params.category)
+  const foundCategory = await Category.findOne({ _id: req.params.category})
+  console.warn('category found', foundCategory)
+  const songs = await Song.find({ category: foundCategory._id })
+  if (songs.length > 0) {
+    res.json(songs)
+  } else {
+    res.send('No songs found for this category')
   }
 })
 
@@ -147,8 +174,8 @@ router.delete('/songs/:id', authMw, async (req, res) =>{
 })
 
 router.post('/songs', authMw, async (req, res) =>{
-  const { artist, title } = req.body
-  const created = await Song.create({ artist, title, createdBy: req.user})
+  const { artist, title, selectedCategory } = req.body
+  const created = await Song.create({ artist, title, createdBy: req.user, category: selectedCategory})
   res.json(created)
 })
 
@@ -157,13 +184,22 @@ router.get('/categories', authMw, async (req, res) =>{
   res.json(categories)
 })
 
+router.get('/categories/:id', authMw, async (req, res) =>{
+  const category = await Category.findOne({_id:req.params.id})
+  if (category) {
+    res.json(category)
+  } else {
+    res.send({"result":"No category found"})
+  }
+})
+
 router.post('/categories', authMw, async (req, res) =>{
-  const { name } = req.body
+  const { name, image } = req.body
   const category = await Category.findOne({ name })
   if(category) {
-    next('Category exists')
+    res.json({ "error": "category exists"})
   } else {
-    const created = await Category.create({ name })
+    const created = await Category.create({ name, image })
     res.json(created)
   }
 })

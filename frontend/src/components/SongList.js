@@ -2,17 +2,26 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 
-const SongList = () => {
+const SongList = ({ category }) => {
   const [songs, setSongs] = useState([])
   const getSongs = async () => {
     const { data: result } = await axios.get('/api/songs')
     setSongs(result)
-    console.log(result)
+  }
+  const getSongsByCategory = async (category) => {
+    const { data: result } = await axios.get(
+      `/api/categories/${category._id}/songs`
+    )
+    setSongs(result)
   }
 
   useEffect(() => {
-    getSongs()
-  }, [])
+    if (category) {
+      getSongsByCategory(category)
+    } else {
+      getSongs()
+    }
+  }, [category])
 
   const deleteSong = async (id) => {
     const { data: result } = await axios.delete(`/api/songs/${id}`)
@@ -24,7 +33,14 @@ const SongList = () => {
 
   const filtering = async (event) => {
     const filterString = event.target.value
-    if (filterString) {
+    if (category && filterString) {
+      const { data: result } = await axios.get(
+        `/api/search/${category._id}/${filterString}`
+      )
+      if (result) {
+        setSongs(result)
+      }
+    } else if (filterString) {
       const { data: result } = await axios.get(`/api/search/${filterString}`)
       if (result) {
         setSongs(result)
